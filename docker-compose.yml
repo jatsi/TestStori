@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=stori
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"  # Mapeo de puertos
+    networks:
+      - NetStori
+
+  teststori:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - F:/PC/data/:/app/data
+      - ./entrypoint.sh:/shell/entrypoint.sh 
+    environment:
+      - DEST_EMAIL=la_fresa_63@hotmail.com
+      - SMTP_SERVER=smtp.ionos.mx
+      - SMTP_PORT=587
+      - SMTP_USERNAME=00@00.contact
+      - SMTP_PASSWORD=1248163264AsD!
+      - DB_HOST=192.168.100.45
+      - DB_USER=root
+      - DB_PASSWORD=stori
+      - DB_DATABASE=transactions
+    networks:
+      - NetStori
+    depends_on:
+      - mysql
+    entrypoint: /shell/entrypoint.sh  # Ruta al script de inicio personalizado
+    command: ["python3", "./src/main.py"]  # Comando para iniciar teststori
+    
+
+networks:
+  NetStori:
+    driver: bridge
