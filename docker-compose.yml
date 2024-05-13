@@ -4,11 +4,11 @@ services:
   mysql:
     image: mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=stori
+      - MYSQL_ROOT_PASSWORD=your_root_password_here
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "3306:3306"  # Mapeo de puertos
+      - "3306:3306"  # Port mapping
     networks:
       - NetStori
 
@@ -17,24 +17,24 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - F:/PC/data/:/app/data
+      - /path/to/your/local/data:/app/data  # Specify the path to your local data
       - ./entrypoint.sh:/shell/entrypoint.sh 
     environment:
-      - DEST_EMAIL=la_fresa_63@hotmail.com
-      - SMTP_SERVER=smtp.ionos.mx
+      - DEST_EMAIL=your_email@example.com
+      - SMTP_SERVER=smtp.example.com
       - SMTP_PORT=587
-      - SMTP_USERNAME=00@00.contact
-      - SMTP_PASSWORD=1248163264AsD!
-      - DB_HOST=192.168.100.45
+      - SMTP_USERNAME=your_smtp_username
+      - SMTP_PASSWORD=your_smtp_password
+      - DB_HOST=192.168.xxx.xx
       - DB_USER=root
-      - DB_PASSWORD=stori
+      - DB_PASSWORD=your_mysql_password
       - DB_DATABASE=transactions
     networks:
       - NetStori
     depends_on:
       - mysql
-    entrypoint: /shell/entrypoint.sh  # Ruta al script de inicio personalizado
-    command: ["python3", "./src/main.py"]  # Comando para iniciar teststori
+    command: ["/bin/sh", "-c", "sleep 30 && python3 ./src/main.py"]
+   
     
 
 networks:
